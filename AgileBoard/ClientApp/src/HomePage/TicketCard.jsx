@@ -3,38 +3,44 @@ import { connect } from 'react-redux';
 
 import { ticketActions } from '../_actions';
 
-export class TicketCard extends React.Component {
+class TicketCard extends React.Component {
     constructor(props) {
         super(props);
 
         /*this.state = { tickets: [] };*/
         this.state = {
             ticket: props.ticket,
-            submitted: false
+            isUpdated: false,
         };
-        this.onClickDelete = this.onClickDelete.bind(this);
+
+        this.onClickUpdate = this.onClickUpdate.bind(this);
+        this.onClickCancel = this.onClickCancel.bind(this);
+        this.handleDeleteTicket = this.handleDeleteTicket.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
     }
 
-    onClickDelete(e) {
-        this.props.onRemove(this.state.ticket);
-    }
+
 
     handleDeleteTicket(id) {
         return (e) => this.props.dispatch(ticketActions.delete(id));
     }
 
-    handleCreateTicket() {
-        return (e) => this.props.dispatch(ticketActions.create());
-    }
-
-    handleUpdateTicket(ticket) {
-        return (e) => this.props.dispatch(ticketActions.update(ticket));
-    }
-
     handleMoveTicket(ticket) {
         return (e) => this.props.dispatch(ticketActions.move(ticket));
+    }
+
+    onClickUpdate(e) {
+        this.setState({ isUpdated: true });
+
+    }
+
+    onClickCancel(event) {
+        event.preventDefault();
+        this.setState({
+            ticket: this.props.ticket,
+            isUpdated: false
+        });
     }
 
     handleChange(event) {
@@ -49,51 +55,55 @@ export class TicketCard extends React.Component {
 
     }
 
-    handleSubmit(event) {
+    handleUpdate(event) {
         event.preventDefault();
 
         this.setState({ submitted: true });
         const { ticket } = this.state;
+        ticket.user.username = this.props.user.username;
         const { dispatch } = this.props;
         if (ticket.name && ticket.description) {
-            dispatch(ticketActions.create(ticket));
+            dispatch(ticketActions.update(ticket));
         }
-        this.props.onCardSubmit({ isOpen: false });
+        this.setState({ isUpdated: false });
     }
 
     render() {
-        const { creating, tickets } = this.props;
+        const { creating } = this.props;
         const { ticket, submitted } = this.state;
-        /*if (this.state.isUpdated) {
+        if (this.state.isUpdated) {
             return <div className={this.state.ticket.columnId + " "} onDragStart={this.onCardMove}>
                 <div className="card-body">
-                    <input className="input-group-text bg-secondary text-white" type="text"
-                        value={this.state.updateName}
-                        onChange={this.onNameChange} />
-                    <input className="input-group-text bg-secondary text-white" type="text"
-                        value={this.state.updateDescription}
-                        onChange={this.onDescriptionChange} />
-                    <p class="card-text"><small class="text-muted">Last modified by: {this.state.ticket.userId}</small></p>
+                    <div className={'form-group' + (submitted && !ticket.name ? ' has-error' : '')}>
+                        <label htmlFor="name"></label>
+                        <input type="text" className="form-control" name="name" value={ticket.name} onChange={this.handleChange} />
+                        {submitted && !ticket.name &&
+                            <div className="help-block">Name is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !ticket.description ? ' has-error' : '')}>
+                        <label htmlFor="description"></label>
+                        <input type="text" className="form-control" name="description" value={ticket.description} onChange={this.handleChange} />
+                        {submitted && !ticket.description &&
+                            <div className="help-block">Description is required</div>
+                        }
+                    </div>
+                    <p class="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
                     <div className="btn-group-justified" role="group">
-                        <span> <button className="btn btn-outline-dark" onClick={this.onClickSave}>Save</button> </span>
-                        <span> <button className="btn btn-outline-danger" onClick={this.onClickDelete}>Delete</button> </span>
+                        <span> <button className="btn btn-outline-primary" onClick={this.handleUpdate}>Save</button> </span>
+                        {creating &&
+                            <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        }
+                        <span> <button className="btn btn-outline-dark" onClick={this.onClickCancel}>Cancel</button> </span>
+                        {
+                            ticket.deleting ? <em> - Deleting...</em>
+                                : ticket.deleteError ? <span className="text-danger"> - ERROR: {ticket.deleteError}</span>
+                                    : <span> <button className="btn btn-outline-danger" onClick={this.handleDeleteTicket(ticket.id)}>Delete</button> </span>
+                        }
                     </div>
                 </div>
             </div>;
-        }*/
-        /*if (this.state.ticket.columnId === "3") {
-            return <div className={this.state.ticket.state.name + " "} onDragStart={this.onCardMove}>
-                <div className="card-body">
-                    <h5 className="card-title">{this.state.ticket.name}</h5>
-                    <p className="card-text">{this.state.ticket.id + ' ' + this.state.ticket.description + ' ' + this.state.ticket.columnId +
-                        ' ' + this.state.ticket.previousTicketId + ' ' + this.state.ticket.nextTicketId}</p>
-                    <p class="card-text"><small class="text-muted">Last modified by: {this.state.ticket.userId}</small></p>
-                    <div className="btn-group-justified" role="group">
-                        <span> <button className="btn btn-outline-danger" onClick={this.onClickDelete}>Delete</button> </span>
-                    </div>
-                </div>
-            </div>;
-        }*/
+        }
         return (
             <div>
                 <div className="card-body">
@@ -101,17 +111,13 @@ export class TicketCard extends React.Component {
 
                     <p className="card-text">{ticket.id + ' ' + ticket.description + ' ' + ticket.columnId +
                         ' ' + ticket.previousTicketId + ' ' + ticket.nextTicketId}</p>
-                    <p class="card-text"><small class="text-muted">Last modified by: {ticket.userId}</small></p>
+                    <p class="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
                     <div className="btn-group-justified" role="group">
-                        {
-                            ticket.updating ? <em> - Updating...</em>
-                                : ticket.updateError ? <span className="text-danger"> - ERROR: {ticket.updateError}</span>
-                                    : <span> <button className="btn btn-outline-dark" onClick={this.handleUpdateTicket(ticket)}>Update</button> </span>
-                        }
+                        <span> <button className="btn btn-outline-dark" onClick={this.onClickUpdate}>Update</button> </span>
                         {
                             ticket.deleting ? <em> - Deleting...</em>
                                 : ticket.deleteError ? <span className="text-danger"> - ERROR: {ticket.deleteError}</span>
-                                    : <span> <button className="btn btn-outline-danger" onClick={this.onClickDelete}>Delete</button> </span>
+                                    : <span> <button className="btn btn-outline-danger" onClick={this.handleDeleteTicket(ticket.id)}>Delete</button> </span>
                         }
                     </div>
                 </div>
@@ -119,3 +125,14 @@ export class TicketCard extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    const { updating, authentication } = state;
+    const { user } = authentication;
+    return {
+        updating, user
+    };
+}
+
+const connectedTicketCard = connect(mapStateToProps)(TicketCard);
+export { connectedTicketCard as TicketCard };

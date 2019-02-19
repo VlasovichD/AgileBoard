@@ -6,6 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public int UserId { get; set; }
+        public UserModel User { get; set; }
         public int ColumnId { get; set; }
         public int? PreviousTicketId { get; set; }
         public int? NextTicketId { get; set; }

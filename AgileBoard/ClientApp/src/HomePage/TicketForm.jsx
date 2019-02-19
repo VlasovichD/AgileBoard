@@ -34,7 +34,6 @@ class TicketForm extends React.Component {
 
         this.setState({ submitted: true });
         const { ticket } = this.state;
-        const { dispatch } = this.props;
         if (ticket.name && ticket.description) {
             this.props.onCardSubmit({ name: ticket.name, description: ticket.description });
             this.setState({ ticket: { name: '', description: '' } })
