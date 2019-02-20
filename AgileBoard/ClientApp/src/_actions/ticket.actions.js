@@ -18,7 +18,7 @@ function create(ticket) {
         ticketService.create(ticket)
             .then(
                 ticket => { 
-                    dispatch(success());
+                    dispatch(success(ticket));
                     dispatch(alertActions.success('Ticket successfuly added'));
                     dispatch(ticketActions.getAll());
                 },

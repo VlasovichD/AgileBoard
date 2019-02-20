@@ -13,53 +13,17 @@ class HomePage extends React.Component {
         super(props);
 
         this.state = {
-            tickets: [],
-            isOpen: false
+            tickets: []
         };
-
-        this.openTicketAdder = this.openTicketAdder.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.props.dispatch(ticketActions.getAll());
     }
 
-    handleCreateTicket() {
-        return (e) => this.props.dispatch(ticketActions.create());
-    }
-
-    handleUpdateTicket(ticket) {
-        return (e) => this.props.dispatch(ticketActions.update(ticket));
-    }
-
     handleMoveTicket(ticket) {
         return (e) => this.props.dispatch(ticketActions.move(ticket));
     }
-
-    handleChange(event) {
-        const { name, value } = event.target;
-        const { ticket } = this.state;
-        this.setState({
-            ticket: {
-                ...ticket,
-                [name]: value
-            }
-        });
-    }
-
-    handleSubmit(ticket) {
-        const { dispatch } = this.props;
-        if (ticket.name && ticket.description) {
-            dispatch(ticketActions.create(ticket));
-            this.setState({ isOpen: false });
-        }
-    }
-
-    openTicketAdder = () => {
-        this.setState({ isOpen: true });
-    };
 
     onDragStart = (ev, id) => {
         console.log('dragstart:', id);
@@ -87,9 +51,7 @@ class HomePage extends React.Component {
     }
 
     render() {
-
-        const { tickets, creating } = this.props;
-        const { isOpen, submitted } = this.state;
+        const { tickets } = this.props;
         return (
             <div className="container-drag">
                 <div class="row">
@@ -104,6 +66,7 @@ class HomePage extends React.Component {
                             <div>
 
                                 {tickets.items.map((ticket, index) => {
+
                                     if (ticket.columnId === 1) {
                                         return < div className="card bg-light mb-3 draggable" style={{ maxWidth: "18rem" }}
                                             key={ticket.id}
@@ -120,10 +83,7 @@ class HomePage extends React.Component {
                             </div>
                         }
                         <div>
-                            {isOpen ?
-                                <TicketForm onCardSubmit={this.handleSubmit} /> :
-                                <button className="btn btn-primary" onClick={this.openTicketAdder}>Add new</button>}
-
+                            <TicketForm />
                         </div>
                     </div>
                     <div class="col-4"
@@ -187,9 +147,11 @@ class HomePage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { tickets, creating } = state;
+    const { tickets, create } = state;
+    const { ticket } = create;
+
     return {
-        tickets, creating
+        tickets, ticket
     };
 }
 
