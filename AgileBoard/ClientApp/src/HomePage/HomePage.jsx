@@ -64,7 +64,7 @@ class HomePage extends React.Component {
 
                                     if (ticket.columnId === 1) {
                                         return < div className="card bg-light mb-3 draggable" style={{ maxWidth: "18rem" }}
-                                            key={ticket.priority}
+                                            key={ticket.id}
                                             onDragStart={(e) => this.onDragStart(e, ticket.id)}
                                             draggable
                                         >
@@ -94,7 +94,7 @@ class HomePage extends React.Component {
                                 {tickets.items.map((ticket, index) => {
                                     if (ticket.columnId === 2) {
                                         return < div className="card bg-light mb-3 draggable" style={{ maxWidth: "18rem" }}
-                                            key={ticket.priority}
+                                            key={ticket.id}
                                             onDragStart={(e) => this.onDragStart(e, ticket.id)}
                                             draggable
                                         >
@@ -124,7 +124,7 @@ class HomePage extends React.Component {
                                 {tickets.items.map((ticket, index) => {
                                     if (ticket.columnId === 3) {
                                         return < div className="card bg-light mb-3 draggable" style={{ maxWidth: "18rem" }}
-                                            key={ticket.priority}
+                                            key={ticket.id}
                                             onDragStart={(e) => this.onDragStart(e, ticket.id)}
                                             draggable
                                         >
