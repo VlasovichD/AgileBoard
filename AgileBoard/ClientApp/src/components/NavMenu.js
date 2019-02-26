@@ -4,9 +4,18 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
+import { history } from '../helpers';
+import { alertActions } from '../actions';
+
 class NavMenu extends React.Component {
     constructor(props) {
         super(props);
+
+        const { dispatch } = this.props;
+        history.listen((location, action) => {
+            // clear alert on location change
+            dispatch(alertActions.clear());
+        });
 
         this.toggle = this.toggle.bind(this);
         this.state = {
