@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ticketActions } from '../_actions';
+import { ticketActions } from '../actions';
 
 
 class TicketForm extends React.Component {
@@ -10,7 +10,8 @@ class TicketForm extends React.Component {
         this.state = {
             ticket: {
                 name: '',
-                description: ''
+                description: '',
+                columnId: props.columnId
             },
             submitted: false,
             isOpen: false
@@ -26,7 +27,8 @@ class TicketForm extends React.Component {
         this.setState({
             ticket: {
                 name: "",
-                description: ""
+                description: "",
+                columnId: this.props.columnId
             },
             isOpen: true,
             submitted: false

@@ -30,7 +30,7 @@ namespace AgileBoard.Controllers
 
         // POST api/board
         [HttpPost]
-        public IActionResult Create([FromBody, Bind("Name, Description")] TicketModel ticket)
+        public IActionResult Create([FromBody, Bind("Name, Description, ColumnId")] TicketModel ticket)
         {
             try
             {

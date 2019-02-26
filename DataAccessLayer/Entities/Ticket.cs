@@ -16,9 +16,9 @@ namespace DataAccessLayer.Entities
         public User User { get; set; }
         public int ColumnId { get; set; }
         public Column Column { get; set; }
-        public int? PreviousTicketId { get; set; }
-        public Ticket PreviousTicket { get; set; }
-        public int? NextTicketId { get; set; }
-        public Ticket NextTicket { get; set; }
+        //public int? PreviousTicketId { get; set; }
+        //public Ticket PreviousTicket { get; set; }
+        //public int? NextTicketId { get; set; }
+        //public Ticket NextTicket { get; set; }
     }
 }

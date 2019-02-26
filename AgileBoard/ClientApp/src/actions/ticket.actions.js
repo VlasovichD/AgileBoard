@@ -1,5 +1,5 @@
-import { ticketConstants } from '../_constants';
-import { ticketService } from '../_services';
+import { ticketConstants } from '../constants';
+import { ticketService } from '../services';
 import { alertActions } from '.';
 
 export const ticketActions = {
@@ -97,6 +97,7 @@ function move(ticket) {
                 ticket => {
                     dispatch(success());
                     dispatch(alertActions.success('Ticket successfuly moved'));
+
                 },
                 error => {
                     dispatch(failure(error.toString()));

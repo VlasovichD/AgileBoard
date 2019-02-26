@@ -1,4 +1,4 @@
-import { ticketConstants } from '../_constants';
+import { ticketConstants } from '../constants';
 
 export function tickets(state = {}, action) {
     switch (action.type) {

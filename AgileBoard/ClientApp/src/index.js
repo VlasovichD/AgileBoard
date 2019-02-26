@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
-import { history } from './_helpers';
-import { store } from './_helpers/store';
+import { history } from './helpers';
+import { store } from './helpers/store';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 

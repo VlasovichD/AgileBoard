@@ -26,18 +26,17 @@ namespace BusinessLogicLayer.Services
                 throw new ValidationException("Ticket name is empty");
 
             var newTicket = _mapper.Map<Ticket>(newTicketDTO);
-            newTicket.ColumnId = 1;
 
-            var previousTicket = _database.Tickets.Find(t => t.ColumnId == newTicket.ColumnId && t.NextTicketId == null).SingleOrDefault();
+            //var previousTicket = _database.Tickets.Find(t => t.ColumnId == newTicket.ColumnId && t.NextTicketId == null).SingleOrDefault();
 
-            newTicket.PreviousTicketId = previousTicket?.Id;
+            //newTicket.PreviousTicketId = previousTicket?.Id;
 
-            newTicket.NextTicketId = null;
+            //newTicket.NextTicketId = null;
 
             _database.Tickets.Create(newTicket);
 
-            if (previousTicket != null)
-                previousTicket.NextTicketId = newTicket.Id;
+            //if (previousTicket != null)
+            //    previousTicket.NextTicketId = newTicket.Id;
 
             _database.Save();
 
@@ -91,35 +90,36 @@ namespace BusinessLogicLayer.Services
 
             var newTicket = _mapper.Map<Ticket>(newTicketDTO);
 
-            if (newTicket.PreviousTicketId != null)
-            {
-                var previousNewTicket = _database.Tickets.GetById(newTicket.PreviousTicketId.Value);
-                previousNewTicket.NextTicketId = newTicket.Id;
-            }
+            //if (newTicket.PreviousTicketId != null)
+            //{
+            //    var previousNewTicket = _database.Tickets.GetById(newTicket.PreviousTicketId.Value);
+            //    previousNewTicket.NextTicketId = newTicket.Id;
+            //}
 
-            if (newTicket.NextTicketId != null)
-            {
-                var nextNewTicket = _database.Tickets.GetById(newTicket.NextTicketId.Value);
-                nextNewTicket.PreviousTicketId = newTicket.Id;
-            }
+            //if (newTicket.NextTicketId != null)
+            //{
+            //    var nextNewTicket = _database.Tickets.GetById(newTicket.NextTicketId.Value);
+            //    nextNewTicket.PreviousTicketId = newTicket.Id;
+            //}
 
-            if (currentTicket.PreviousTicketId != null)
-            {
-                var previousCurrentTicket = _database.Tickets.GetById(currentTicket.PreviousTicketId.Value);
-                previousCurrentTicket.NextTicketId = currentTicket.NextTicketId;
-            }
+            //if (currentTicket.PreviousTicketId != null)
+            //{
+            //    var previousCurrentTicket = _database.Tickets.GetById(currentTicket.PreviousTicketId.Value);
+            //    previousCurrentTicket.NextTicketId = currentTicket.NextTicketId;
+            //}
 
-            if (currentTicket.NextTicketId != null)
-            {
-                var nextCurrentTicket = _database.Tickets.GetById(currentTicket.NextTicketId.Value);
-                nextCurrentTicket.PreviousTicketId = currentTicket.PreviousTicketId;
-            }
+            //if (currentTicket.NextTicketId != null)
+            //{
+            //    var nextCurrentTicket = _database.Tickets.GetById(currentTicket.NextTicketId.Value);
+            //    nextCurrentTicket.PreviousTicketId = currentTicket.PreviousTicketId;
+            //}
 
             currentTicket.UserId = newTicket.UserId;
             currentTicket.ColumnId = newTicket.ColumnId;
-            currentTicket.PreviousTicketId = newTicket.PreviousTicketId;
-            currentTicket.NextTicketId = newTicket.NextTicketId;
-            
+
+            //currentTicket.PreviousTicketId = newTicket.PreviousTicketId;
+            //currentTicket.NextTicketId = newTicket.NextTicketId;
+
             _database.Save();
         }
 
@@ -132,19 +132,20 @@ namespace BusinessLogicLayer.Services
                 throw new ValidationException("Ticket not found");
             }
 
-            if (ticket.PreviousTicketId != null)
-            {
-                var previousTicket = _database.Tickets.GetById(ticket.PreviousTicketId.Value);
-                previousTicket.NextTicketId = ticket.NextTicketId;
-            }
+            //if (ticket.PreviousTicketId != null)
+            //{
+            //    var previousTicket = _database.Tickets.GetById(ticket.PreviousTicketId.Value);
+            //    previousTicket.NextTicketId = ticket.NextTicketId;
+            //}
 
-            if (ticket.NextTicketId != null)
-            {
-                var nextTicket = _database.Tickets.GetById(ticket.NextTicketId.Value);
-                nextTicket.PreviousTicketId = ticket.PreviousTicketId;
-            }
+            //if (ticket.NextTicketId != null)
+            //{
+            //    var nextTicket = _database.Tickets.GetById(ticket.NextTicketId.Value);
+            //    nextTicket.PreviousTicketId = ticket.PreviousTicketId;
+            //}
 
-            _database.Save();
+            //_database.Save();
+
             _database.Tickets.Delete(ticketId);
             _database.Save();
         }

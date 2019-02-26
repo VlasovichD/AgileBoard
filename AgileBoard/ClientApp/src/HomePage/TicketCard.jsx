@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { ticketActions } from '../_actions';
+import { ticketActions } from '../actions';
 
 class TicketCard extends React.Component {
     constructor(props) {
@@ -84,7 +84,7 @@ class TicketCard extends React.Component {
                             <div className="help-block">Description is required</div>
                         }
                     </div>
-                    <p class="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
+                    <p className="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
                     <div className="btn-group-justified text-center" role="group">
                         <span> <button className="btn btn-outline-primary" onClick={this.handleUpdate}>Save</button> </span>
                         {creating &&
@@ -105,9 +105,8 @@ class TicketCard extends React.Component {
                 <div className="card-body">
                     <h5 className="card-title">{ticket.name}</h5>
 
-                    <p className="card-text">{ticket.id + ' ' + ticket.description + ' ' + ticket.columnId +
-                        ' ' + ticket.previousTicketId + ' ' + ticket.nextTicketId}</p>
-                    <p class="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
+                    <p className="card-text">{ticket.description}</p>
+                    <p className="card-text"><small class="text-muted">Last modified by: {ticket.user.username}</small></p>
                     <div className="btn-group-justified text-center" role="group">
                         <span> <button className="btn btn-outline-dark" onClick={this.onClickUpdate}>Update</button> </span>
                         {
